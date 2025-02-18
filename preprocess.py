@@ -1,3 +1,6 @@
+import gzip
+import numpy as np
+
 def get_data(inputs_file_path, labels_file_path, num_examples):
     """
     Takes in an inputs file path and labels file path, unzips both files,
@@ -21,6 +24,31 @@ def get_data(inputs_file_path, labels_file_path, num_examples):
     :return: NumPy array of inputs as float32 and labels as int8
     """
 
-    # TODO: Load inputs and labels
+    # Load and unzip inputs
+    with gzip.open(inputs_file_path, 'rb') as f:
+        # skip header bytes for images
+        f.read(16)
+        # read the buffer of bytes (num_examples * 28 * 28) for images
+        buffer = f.read(num_examples * 28 * 28)
+        # convert buffer of bytes to NumPy array
+        inputs = np.frombuffer(buffer, dtype=np.uint8)
+        # reshape NumPy Array
+        inputs = np.reshape(inputs, (num_examples, 28, 28))
+
+    # Load and unzip labels
+    with gzip.open(labels_file_path, 'rb') as f:
+        # skip header bytes for labels
+        f.read(8)
+        # read the buffer of bytes (num_examples) for labels
+        buffer = f.read(num_examples)
+        # convert buffer to NumPy array
+        labels = np.frombuffer(buffer, dtype=np.uint8)
     
-    # TODO: Normalize inputs
+    # Normalize inputs to ranges between 0 to 1
+    # first covert to float32 to do this
+    inputs = inputs.astype(np.float32)
+
+    # now normalize by dividing each pixel by 255, each pixel is exactly 1 byte
+    inputs = inputs / 255.0
+
+    return inputs, labels
