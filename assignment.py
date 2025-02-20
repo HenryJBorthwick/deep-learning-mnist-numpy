@@ -133,7 +133,7 @@ class Model:
         # update weights and biases using gradients and learning rate
         # formula: w = w + λ * Δw
         self.W = self.W + self.learning_rate * gradW
-        self.B = self.B + self.learning_rate * gradB
+        self.b = self.b + self.learning_rate * gradB
 
 def train(model, train_inputs, train_labels):
     """
@@ -147,8 +147,9 @@ def train(model, train_inputs, train_labels):
 
     # TODO: Iterate over the training inputs and labels, in model.batch_size increments
     for start in range(0, len(train_inputs), model.batch_size):
-        inputs = train_inputs[start:start+model.batch_size]
-        labels = train_labels[start:start+model.batch_size]
+        end = start+model.batch_size
+        inputs = train_inputs[start:end]
+        labels = train_labels[start:end]
 
         # TODO: For every batch, compute then descend the gradients for the model's weights
         probabilities = model.call(inputs)
@@ -167,7 +168,13 @@ def test(model, test_inputs, test_labels):
     """
 
     # TODO: Iterate over the testing inputs and labels
+    # calc outputs for entire test set
+    outputs = model.call(test_inputs)
+    # calc accuracy across test set
+    accuracy = model.accuracy(outputs, test_labels)
+
     # TODO: Return accuracy across testing set
+    return accuracy
 
 def visualize_results(image_inputs, probabilities, image_labels):
     """
@@ -203,18 +210,39 @@ def main(mnist_data_folder):
     :return: None
     """
     # TODO: load MNIST train and test examples into train_inputs, train_labels, test_inputs, test_labels
+    # load MNIST train
+    train_inputs, train_labels = get_data(
+        os.path.join(mnist_data_folder, "train-images-idx3-ubyte.gz"),
+        os.path.join(mnist_data_folder, "train-labels-idx1-ubyte.gz"),
+        60000
+    )
+
+    # load MNIST test
+    test_inputs, test_labels = get_data(
+        os.path.join(mnist_data_folder, "t10k-images-idx3-ubyte.gz"),
+        os.path.join(mnist_data_folder, "t10k-labels-idx1-ubyte.gz"),
+        10000
+    )
 
     # TODO: Create Model
+    model = Model()
 
     # TODO: Train model by calling train() ONCE on all data
+    train(model, train_inputs, train_labels)
 
     # TODO: Test the accuracy by calling test() after running train()
+    test_accuracy = test(model, test_inputs, test_labels)
+    print(f"Test accuracy: {test_accuracy}")
 
     # TODO: Visualize the data by using visualize_results()
+    visualize_subset_inputs = test_inputs[:10]
+    visualize_subset_outputs = model.call(visualize_subset_inputs)
+    visualize_subset_labels = test_labels[:10]
+    visualize_results(visualize_subset_inputs, visualize_subset_outputs, visualize_subset_labels)
 
     print("end of assignment 1")
 
 
 if __name__ == '__main__':
     #TODO: you might need to change this to something else if you run locally
-    main("./MNIST_data")
+    main("./assignment1/MNIST_data")
