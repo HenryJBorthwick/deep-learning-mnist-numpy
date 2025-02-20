@@ -33,7 +33,7 @@ def get_data(inputs_file_path, labels_file_path, num_examples):
         # convert buffer of bytes to NumPy array
         inputs = np.frombuffer(buffer, dtype=np.uint8)
         # reshape NumPy Array
-        inputs = np.reshape(inputs, (num_examples, 28, 28))
+        inputs = np.reshape(inputs, (num_examples, 784))
 
     # Load and unzip labels
     with gzip.open(labels_file_path, 'rb') as f:
