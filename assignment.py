@@ -17,14 +17,17 @@ class Model:
 
     def __init__(self):
         # TODO: Initialize all hyperparametrs
-        self.input_size = None # Size of image vectors
-        self.num_classes = None # Number of classes/possible labels
-        self.batch_size = None
-        self.learning_rate = None
+        self.input_size = 783 # Size of image vectors, each image is (28*28=783 pixels)
+        self.num_classes = 10 # Number of classes/possible labels (digits 0-9) 
+        self.batch_size = 100 # number of images per batch
+        self.learning_rate = 0.5 # Step size for weight updates
 
         # TODO: Initialize weights and biases
-        self.W = None
-        self.b = None
+        # MATRIX: 10 rows, one for each perceptron, 784 cols one for each pixel, SHAPE: (10, 784)
+        # Start from 0, model knowns nothing to begin with
+        self.W = np.zeros((self.num_classes, self.input_size)) # Weights: 10 perceptrons * 784 inputs
+        # MATRIX: 10 rows, one for each perceptron, 1 col bias per perceptron, SHAPE: (10, 1)
+        self.b = np.zeros((self.num_classes, 1)) # Biases: 10 perceptrons * 1
 
     def call(self, inputs):
         """
