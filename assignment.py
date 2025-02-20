@@ -17,7 +17,7 @@ class Model:
 
     def __init__(self):
         # TODO: Initialize all hyperparametrs
-        self.input_size = 783 # Size of image vectors, each image is (28*28=783 pixels)
+        self.input_size = 784 # Size of image vectors, each image is (28*28=783 pixels)
         self.num_classes = 10 # Number of classes/possible labels (digits 0-9) 
         self.batch_size = 100 # number of images per batch
         self.learning_rate = 0.5 # Step size for weight updates
@@ -37,6 +37,18 @@ class Model:
         :return: output, unscaled output values for each class per image # (batch_size x 10)
         """
         # TODO: Write the forward pass logic for your model
+        # Forward pass computes score for each perceptron for each image
+        # input shape: (batch_size, 784), flattened pixel values normalized between 0 & 1
+        # input shape: 2D array each row is an image (100 rows/images, each with 784 cols/pixels)
+        # W shape: (10, 784)
+        # b shape: (10, 1)
+        # output shape: (batch_size, 10)
+
+        # transpose math work, avoid looping over pixels
+        # forward pass formula: f(x) = W * X + b
+        output = np.dot(inputs, self.W.T) + self.b.T
+
+        return output
 
 
     def back_propagation(self, inputs, outputs, labels):
