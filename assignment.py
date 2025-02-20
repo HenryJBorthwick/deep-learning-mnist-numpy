@@ -242,7 +242,6 @@ def main(mnist_data_folder):
 
     print("end of assignment 1")
 
-
 if __name__ == '__main__':
     #TODO: you might need to change this to something else if you run locally
     main("./assignment1/MNIST_data")
