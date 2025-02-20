@@ -68,6 +68,27 @@ class Model:
         # TODO: calculate the gradients for the weights and the gradients for the bias with respect to average loss
         # HINT: np.argmax(outputs, axis=1) will give the index of the largest output
 
+        # inputs SHAPE: (batch_size, 784)
+        # output SHAPE: (batch_size, 10)
+        # labels SHAPE: (batch_size,)
+
+        # find predicted labels (highest scoring perceptron for each image)
+        predicted = np.argmax(outputs, axis=1) # SHAPE: (batch_size, )
+
+        # BACK PROPAGATION:
+        # compute y values (how wrong each perceptron is) for each image
+        batch_size = inputs.shape[0]
+        y = np.zeros((batch_size, self.num_classes)) # SHAPE: (batch_size, 10), MATRIX: row is image, col, each entry is y value
+
+        for i in range (batch_size):
+            if predicted[i] != labels[i]: # if highest scoring perceptron does not match label
+                y[i, labels[i]] = 1 # buff perceptron that should have won (perceptron that matches label)
+                y[i, predicted[i]] = -1 # demote perceptron that did, but shouldn't win (perceptron with highest score and didn't match label)
+
+        # compute gradient for weights and biases, average over batch
+        gradW = np.dot(y.T, inputs) / batch_size # SHAPE: (10, batch_size) @ (batch_size, 784) -> (10, 784)
+        gradB = np.mean(y, axis=0).reshape(self.num_classes, 1) #SHAPE: (10,) -> (10, 1)
+
 
     def accuracy(self, outputs, labels):
         """

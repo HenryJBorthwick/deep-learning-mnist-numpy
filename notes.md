@@ -22,4 +22,10 @@
         - if perceptron shouldn't have won, then demote
         - if perceptron didn't win or shouldn't have won, then do nothing
           - i.e their scores are lower than the correct perceptron score
-        - if perceptron did win, and should have won, do nothing
+      - if perceptron did win, and should have won, do nothing
+
+
+### step 3: Fix their mistakes (back propagation)
+- each perceptron calculates, if wrong, how wrong its weights were, and adjusts
+- its adjust = (tweak = how wrong perceptron was (+1 or -1)) * (pixel value)
+- bias also tweaked based off how wrong perceptron was (+1 or -1)
