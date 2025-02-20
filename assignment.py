@@ -86,10 +86,17 @@ class Model:
                 y[i, predicted[i]] = -1 # demote perceptron that did, but shouldn't win (perceptron with highest score and didn't match label)
 
         # compute gradient for weights and biases, average over batch
+
+        # gradW = (1/n) * Σ(y * x)
         gradW = np.dot(y.T, inputs) / batch_size # SHAPE: (10, batch_size) @ (batch_size, 784) -> (10, 784)
+
+        # gradB = (1/n) * Σ(y)
         gradB = np.mean(y, axis=0).reshape(self.num_classes, 1) #SHAPE: (10,) -> (10, 1)
 
+        return gradW, gradB
 
+
+    # how we evaluate the models success after training
     def accuracy(self, outputs, labels):
         """
         Calculates the model's accuracy by comparing the number
@@ -100,6 +107,19 @@ class Model:
         """
         # TODO: calculate the batch accuracy
 
+        # output SHAPE: (batch_size, 10)
+        # labels SHAPE: (batch_size,)
+
+        # get predicted labels (highest scoring perceptron for each image)
+        predicted = np.argmax(outputs, axis=1) # SHAPE: (batch_size, )
+
+        # compare predictions to true labels and calculate fractional correct
+        correct = np.sum(predicted == labels) # number of matches where the predicted digit matches its label, from bool array
+        total = labels.shape[0] # get total number of images in batch, by number of rows
+        accuracy = correct / total # calc fraction of correct predictions
+
+        return accuracy
+
     def gradient_descent(self, gradW, gradB):
         """
         Given the gradients for weights and biases, does gradient
@@ -109,6 +129,11 @@ class Model:
         :return: None
         """
         # TODO: change the weights and biases of the model to descent the gradient
+
+        # update weights and biases using gradients and learning rate
+        # formula: w = w + λ * Δw
+        self.W = self.W + self.learning_rate * gradW
+        self.B = self.B + self.learning_rate * gradB
 
 def train(model, train_inputs, train_labels):
     """
