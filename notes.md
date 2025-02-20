@@ -29,3 +29,17 @@
 - each perceptron calculates, if wrong, how wrong its weights were, and adjusts
 - its adjust = (tweak = how wrong perceptron was (+1 or -1)) * (pixel value)
 - bias also tweaked based off how wrong perceptron was (+1 or -1)
+
+### step 4: Learn a little bit (gradient descent)
+- perceptrons take small steps so to no overreact
+- the steps are set by the learning rate
+  - new weight = old weight + (learning rate * tweak), tweak = (how wrong(+1 or -1)) * (pixel value)
+
+### step 5: Learn in groups (batches)
+- instead of a single picture at a time, we do 100 pictures at once
+- each perceptron adds up all the tweaks from those 100 pictures, averages them, then updates their weights
+- makes learning faster and smoother
+
+### step 6: keep practicing 
+- show all 60,000 pictures once, thats one 'epoch', perceptrons tweak their weights a little each batch, getting better
+
