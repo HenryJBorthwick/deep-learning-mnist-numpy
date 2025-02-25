@@ -80,10 +80,15 @@ class Model:
         batch_size = inputs.shape[0]
         y = np.zeros((batch_size, self.num_classes)) # SHAPE: (batch_size, 10), MATRIX: row is image, col, each entry is y value
 
-        for i in range (batch_size):
-            if predicted[i] != labels[i]: # if highest scoring perceptron does not match label
-                y[i, labels[i]] = 1 # buff perceptron that should have won (perceptron that matches label)
-                y[i, predicted[i]] = -1 # demote perceptron that did, but shouldn't win (perceptron with highest score and didn't match label)
+        # Vectorized computation of y
+        incorrect = (predicted != labels)  # Boolean mask for misclassified images
+        y[np.arange(batch_size)[incorrect], labels[incorrect]] = 1  # Set 1 for true labels
+        y[np.arange(batch_size)[incorrect], predicted[incorrect]] = -1  # Set -1 for predicted labels
+
+        # for i in range (batch_size):
+            # if predicted[i] != labels[i]: # if highest scoring perceptron does not match label
+                # y[i, labels[i]] = 1 # buff perceptron that should have won (perceptron that matches label)
+                # y[i, predicted[i]] = -1 # demote perceptron that did, but shouldn't win (perceptron with highest score and didn't match label)
 
         # compute gradient for weights and biases, average over batch
 
