@@ -1,3 +1,7 @@
+# Overview
+
+A single-layer neural network implementation for MNIST digit classification using NumPy for deep learning
+
 # Answer the conceptual questions here
 Q1: Is there anything we need to know to get your code to work? If you did not get your code working or handed in an incomplete solution please let us know what you did complete (0-4 sentences)
 - i have changed file paths to make it work on locally on machine
